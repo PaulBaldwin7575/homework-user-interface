@@ -1,5 +1,6 @@
 package com.company.homeworkloans.screen.client;
 
+import io.jmix.ui.action.Action;
 import io.jmix.ui.screen.*;
 import com.company.homeworkloans.entity.Client;
 
@@ -7,4 +8,5 @@ import com.company.homeworkloans.entity.Client;
 @UiDescriptor("client-edit.xml")
 @EditedEntityContainer("clientDc")
 public class ClientEdit extends StandardEditor<Client> {
+
 }

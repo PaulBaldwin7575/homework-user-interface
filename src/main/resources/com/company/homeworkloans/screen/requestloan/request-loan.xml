@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://requestLoan.caption"
+        focusComponent="form">
+    <data readOnly="true">
+
+        <collection id="clientsDc"
+                    class="com.company.homeworkloans.entity.Client">
+            <fetchPlan extends="_instance_name"/>
+
+            <loader id="clientsDl">
+                <query>
+                    <![CDATA[select e from Client e]]>
+                </query>
+            </loader>
+        </collection>
+        <instance id="loanDc" class="com.company.homeworkloans.entity.Loan">
+            <fetchPlan extends="_base">
+                <property name="client" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="loanDl"/>
+        </instance>
+
+    </data>
+    <actions>
+        <action id="requestCommitAndClose" caption="Request"
+                icon="OK"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="requestCancel"
+                icon="CLOSE"
+                caption="Cancel"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"
+                forceDialog="true"/>
+    <layout spacing="true" expand="editActions">
+        <form id="form" dataContainer="loanDc">
+            <column>
+                <entityComboBox id="clientComboBox" property="client"
+                                optionsContainer="clientsDc" required="true"
+                                requiredMessage="not empty"/>
+                <textField id="amountField" property="amount"
+                            required="true" requiredMessage="not empty"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="saveBtn" action="requestCommitAndClose"/>
+            <button id="cancelBtn" action="requestCancel"/>
+        </hbox>
+    </layout>
+</window>
