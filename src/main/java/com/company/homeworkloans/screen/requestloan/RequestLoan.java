@@ -4,7 +4,6 @@ import com.company.homeworkloans.entity.Loan;
 import com.company.homeworkloans.entity.LoanStatus;
 import io.jmix.core.DataManager;
 import io.jmix.core.Metadata;
-import io.jmix.core.MetadataTools;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.model.InstanceContainer;
@@ -21,8 +20,6 @@ public class RequestLoan extends Screen {
     private InstanceContainer<Loan> loanDc;
     @Autowired
     private Metadata metadata;
-    @Autowired
-    private MetadataTools metadataTools;
 
     @Autowired
     private Notifications notifications;
@@ -38,10 +35,26 @@ public class RequestLoan extends Screen {
     @Subscribe("saveBtn")
     public void onSaveBtnClick(Button.ClickEvent event) {
         Loan loan = loanDc.getItem();
-        loan.setStatus(LoanStatus.REQUESTED);
-        loan.setRequestDate(LocalDate.now());
-        dataManager.save(loan);
+        if (loan.getClient() == null) {
+            notifications.create()
+                    .withCaption("Select a client")
+                    .withType(Notifications.NotificationType.TRAY)
+                    .show();
+        } else if (loan.getAmount() == null || loan.getAmount().signum() != 1) {
+            notifications.create()
+                    .withCaption("Amount must be bigger, than 0")
+                    .withType(Notifications.NotificationType.TRAY)
+                    .show();
+        } else {
+            loan.setStatus(LoanStatus.REQUESTED);
+            loan.setRequestDate(LocalDate.now());
+            dataManager.save(loan);
+            close(StandardOutcome.CLOSE);
+        }
     }
 
-
+    @Subscribe("cancelBtn")
+    public void onCancelBtnClick(Button.ClickEvent event) {
+        close(StandardOutcome.CLOSE);
+    }
 }

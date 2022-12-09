@@ -25,6 +25,7 @@
     <actions>
         <action id="requestCommitAndClose" caption="Request"
                 icon="OK"
+                primary="true"
                 shortcut="${COMMIT_SHORTCUT}"/>
         <action id="requestCancel"
                 icon="CLOSE"

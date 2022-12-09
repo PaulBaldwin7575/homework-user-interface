@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg:///window.caption"
+        focusComponent="loansTable">
+    <data readOnly="true">
+        <collection id="loansDc"
+                    class="com.company.homeworkloans.entity.Loan">
+            <fetchPlan extends="_base">
+                <property name="client" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="loansDl">
+                <query>
+                    <![CDATA[select e from Loan e
+                    where e.status = 'R'  ]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="loansDc1" class="com.company.homeworkloans.entity.Loan">
+            <fetchPlan extends="_base">
+                <property name="client" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="loansDl1">
+                <query>
+                    <![CDATA[select e from Loan e
+                    where e.client = :client1
+                    and e.id <> :id1  ]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="loansTable" spacing="true">
+        <filter id="filter"
+                dataLoader="loansDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="loansTable"
+                    width="100%"
+                    dataContainer="loansDc">
+            <actions>
+            </actions>
+            <columns>
+                <group>
+                    <column id="requestDate"/>
+                </group>
+                <column id="client"/>
+                <column id="amount"/>
+                <column id="client.phoneNumber"/>
+                <column id="client.salary"/>
+                <column id="age" caption="Age"/>
+            </columns>
+            <simplePagination/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="approveBtn" icon="OK"
+                        primary="true" caption="Approve"/>
+                <button id="rejectBtn" icon="CLOSE"
+                        caption="Reject"/>
+            </buttonsPanel>
+        </groupTable>
+        <label stylename="h2 bold" value="Previous loans:"/>
+        <table id="loansTable1" height="190px" width="100%" dataContainer="loansDc">
+            <columns>
+                <column id="amount"/>
+                <column id="requestDate"/>
+                <column id="status"/>
+            </columns>
+        </table>
+    </layout>
+</window>
